@@ -14,5 +14,7 @@ main = do
 display :: IO ()
 display = do
     clear [ColorBuffer]
+    -- Coordinates are grouped into three and rendered as triangles.
+    -- The final (n mod 3) coordinates are ignored.
     renderPrimitive Triangles $ mapM_ (\(x,y,z) -> vertex $ Vertex3 x y z) points
     flush
