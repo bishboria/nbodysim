@@ -8,6 +8,7 @@ import Points
 
 display = do
     clear [ColorBuffer]
+    scale 0.7 0.7 (0.7::GLfloat)
     mapM_ (\(x,y,z) -> preservingMatrix $ do
         color $ Color3 ((x+1.0)/2.0) ((y+1.0)/2.0) ((z+1)/2.0)
         translate $ Vector3 x y z
