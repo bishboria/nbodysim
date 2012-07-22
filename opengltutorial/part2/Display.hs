@@ -8,6 +8,7 @@ import Points
 
 display angle = do
     clear [ColorBuffer]
+    loadIdentity
     a <- get angle
     rotate a $ Vector3 0 0 (1::GLfloat)
     scale 0.7 0.7 (0.7::GLfloat)
@@ -16,7 +17,7 @@ display angle = do
         translate $ Vector3 x y z
         cube (0.1::GLfloat)
         ) $ points 7
-    flush
+    swapBuffers
 
 idle angle = do
     a <- get angle

@@ -6,6 +6,7 @@ import Bindings
 
 main = do
     (progName,_) <- getArgsAndInitialize
+    initialDisplayMode $= [DoubleBuffered]
     createWindow "Hello, World!"
     reshapeCallback $= Just reshape
     keyboardMouseCallback $= Just keyboardMouse
