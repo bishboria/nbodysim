@@ -9,8 +9,10 @@ main = do
     initialDisplayMode $= [DoubleBuffered]
     createWindow "Hello, World!"
     reshapeCallback $= Just reshape
-    keyboardMouseCallback $= Just keyboardMouse
-    angle <- newIORef 0.0
-    displayCallback $= (display angle)
-    idleCallback $= Just (idle angle)
+    angle <- newIORef (0.0::GLfloat)
+    delta <- newIORef (0.1::GLfloat)
+    position <- newIORef (0.0::GLfloat, 0.0)
+    keyboardMouseCallback $= Just (keyboardMouse delta position)
+    idleCallback $= Just (idle angle delta)
+    displayCallback $= (display angle position)
     mainLoop
