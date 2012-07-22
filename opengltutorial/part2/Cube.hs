@@ -14,3 +14,11 @@ cube w = renderPrimitive Quads $ vertify3
       (-w, w, w), (-w, w, -w), (-w, -w, -w), (-w, -w, w),
       (w, -w, w), (w, -w, -w), (-w, -w, -w), (-w, -w, w),
       (w, w, -w), (w, -w, -w), (-w, -w, -w), (-w, w, -w) ]
+
+cubeFrame w = renderPrimitive Lines $ vertify3
+    [ ( w,-w, w), ( w, w, w), ( w, w, w), (-w, w, w),
+      (-w, w, w), (-w,-w, w), (-w,-w, w), ( w,-w, w),
+      ( w,-w, w), ( w,-w,-w), ( w, w, w), ( w, w,-w),
+      (-w, w, w), (-w, w,-w), (-w,-w, w), (-w,-w,-w),
+      ( w,-w,-w), ( w, w,-w), ( w, w,-w), (-w, w,-w),
+      (-w, w,-w), (-w,-w,-w), (-w,-w,-w), ( w,-w,-w) ]
