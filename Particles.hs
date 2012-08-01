@@ -5,11 +5,13 @@ module Particles
 , Particle
 ) where
 
+import Control.Applicative
+
 data Mass     = Mass Float deriving (Show)
 data Position = Position Float Float Float deriving (Show)
 data Velocity = Velocity Float Float Float deriving (Show)
 data Particle = Particle Mass Position Velocity deriving (Show)
-g = 6.67e-11
+g = 6.67e-11 -- ugg. It also does not belong in this module
 
 mass :: Particle -> Float
 mass (Particle (Mass x) _ _) = x
@@ -22,6 +24,15 @@ py (Particle _ (Position _ y _) _) = y
 
 pz :: Particle -> Float
 pz (Particle _ (Position _ _ z) _) = z
+
+vx :: Particle -> Float
+vx (Particle _ _ (Velocity x _ _)) = x
+
+vy :: Particle -> Float
+vy (Particle _ _ (Velocity _ y _)) = y
+
+vz :: Particle -> Float
+vz (Particle _ _ (Velocity _ _ z)) = z
 
 positions :: [Position]
 positions =
@@ -38,9 +49,11 @@ velocities =
 masses :: [Mass]
 masses = [Mass 1, Mass 1]
 
-things = zipWith (\a (b,c) -> (a,b,c)) masses $ zip positions velocities
-particles :: [Particle]
-particles = [Particle x y z | (x,y,z) <- things]
+particles =
+    getZipList $ (\x y z -> Particle x y z)
+               <$> ZipList masses
+               <*> ZipList positions
+               <*> ZipList velocities
 
 distanceBetween :: Particle -> Particle -> Float
 distanceBetween i j = sqrt $ (x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2
