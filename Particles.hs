@@ -3,13 +3,14 @@ module Particles
 , Velocity
 , Mass
 , Particle
+, distanceBetween
 ) where
 
 import Control.Applicative
 
-data Mass     = Mass Float deriving (Show)
-data Position = Position Float Float Float deriving (Show)
-data Velocity = Velocity Float Float Float deriving (Show)
+newtype Mass     = Mass Float deriving (Show)
+newtype Position = Position (Float,Float,Float) deriving (Show)
+newtype Velocity = Velocity (Float,Float,Float) deriving (Show)
 data Particle = Particle Mass Position Velocity deriving (Show)
 g = 6.67e-11 -- ugg. It also does not belong in this module
 
@@ -17,33 +18,33 @@ mass :: Particle -> Float
 mass (Particle (Mass x) _ _) = x
 
 px :: Particle -> Float
-px (Particle _ (Position x _ _) _) = x
+px (Particle _ (Position (x,_,_)) _) = x
 
 py :: Particle -> Float
-py (Particle _ (Position _ y _) _) = y
+py (Particle _ (Position (_,y,_)) _) = y
 
 pz :: Particle -> Float
-pz (Particle _ (Position _ _ z) _) = z
+pz (Particle _ (Position (_,_,z)) _) = z
 
 vx :: Particle -> Float
-vx (Particle _ _ (Velocity x _ _)) = x
+vx (Particle _ _ (Velocity (x,_,_))) = x
 
 vy :: Particle -> Float
-vy (Particle _ _ (Velocity _ y _)) = y
+vy (Particle _ _ (Velocity (_,y,_))) = y
 
 vz :: Particle -> Float
-vz (Particle _ _ (Velocity _ _ z)) = z
+vz (Particle _ _ (Velocity (_,_,z))) = z
 
 positions :: [Position]
 positions =
-    [ Position 0 1 0
-    , Position 1 0 0
+    [ Position (0,1,0)
+    , Position (1,0,0)
     ]
 
 velocities :: [Velocity]
 velocities =
-    [ Velocity 0 0 0
-    , Velocity 0 0 0
+    [ Velocity (0,0,0)
+    , Velocity (0,0,0)
     ]
 
 masses :: [Mass]
