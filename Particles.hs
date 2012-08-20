@@ -3,52 +3,66 @@ module Particles
 , Velocity
 , Mass
 , Particle
-, distanceBetween
+, posX
+, posY
+, posZ
+, particles
 ) where
 
 import Control.Applicative
 
-newtype Mass     = Mass Float deriving (Show)
-newtype Position = Position (Float,Float,Float) deriving (Show)
-newtype Velocity = Velocity (Float,Float,Float) deriving (Show)
-data Particle = Particle Mass Position Velocity deriving (Show)
-g = 6.67e-11 -- ugg. It also does not belong in this module
+type Scalar   = Float
 
-mass :: Particle -> Float
+data Mass     = Mass Scalar deriving (Show, Eq)
+
+data Position = Position { px :: Scalar, py :: Scalar, pz :: Scalar }
+    deriving (Show, Eq)
+
+data Velocity = Velocity { vx :: Scalar, vy :: Scalar, vz :: Scalar }
+    deriving (Show, Eq)
+
+data Particle = Particle { m :: Mass, p :: Position, v :: Velocity }
+    deriving (Show, Eq)
+
+-- g = 6.67e-11 -- ugg. It also does not belong in this module
+
+mass :: Particle -> Scalar
 mass (Particle (Mass x) _ _) = x
 
-px :: Particle -> Float
-px (Particle _ (Position (x,_,_)) _) = x
+posX :: Particle -> Scalar
+posX particle = px $ p particle
 
-py :: Particle -> Float
-py (Particle _ (Position (_,y,_)) _) = y
+posY :: Particle -> Scalar
+posY particle = py $ p particle
 
-pz :: Particle -> Float
-pz (Particle _ (Position (_,_,z)) _) = z
+posZ :: Particle -> Scalar
+posZ particle = pz $ p particle
 
-vx :: Particle -> Float
-vx (Particle _ _ (Velocity (x,_,_))) = x
+velX :: Particle -> Scalar
+velX particle = vx $ v particle
 
-vy :: Particle -> Float
-vy (Particle _ _ (Velocity (_,y,_))) = y
+velY :: Particle -> Scalar
+velY particle = vy $ v particle
 
-vz :: Particle -> Float
-vz (Particle _ _ (Velocity (_,_,z))) = z
+velZ :: Particle -> Scalar
+velZ particle = vz $ v particle
 
 positions :: [Position]
 positions =
-    [ Position (0,1,0)
-    , Position (1,0,0)
+    [ Position 0   0 0
+    , Position 0.5 0 0
     ]
 
 velocities :: [Velocity]
 velocities =
-    [ Velocity (0,0,0)
-    , Velocity (0,0,0)
+    [ Velocity 0 0 0 
+    , Velocity 0 0 0
     ]
 
 masses :: [Mass]
-masses = [Mass 1, Mass 1]
+masses = [ Mass 1
+         , Mass 1
+         ]
 
 particles =
     getZipList $ (\x y z -> Particle x y z)
@@ -56,14 +70,14 @@ particles =
                <*> ZipList positions
                <*> ZipList velocities
 
-distanceBetween :: Particle -> Particle -> Float
+distanceBetween :: Particle -> Particle -> Scalar
 distanceBetween i j = sqrt $ (x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2
-    where x2 = px j
-          y2 = py j
-          z2 = pz j
-          x1 = px i
-          y1 = py i
-          z1 = pz i
+    where x2 = posX j
+          y2 = posY j
+          z2 = posZ j
+          x1 = posX i
+          y1 = posY i
+          z1 = posZ i
 
 {-force i j = (-g) * mass i * mass j / dr^2 -- missing r^ unit vector-}
     {-where dr = distanceBetween i j-}
