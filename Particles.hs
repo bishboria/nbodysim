@@ -24,8 +24,6 @@ data Velocity = Velocity { vx :: Scalar, vy :: Scalar, vz :: Scalar }
 data Particle = Particle { m :: Mass, p :: Position, v :: Velocity }
     deriving (Show, Eq)
 
--- g = 6.67e-11 -- ugg. It also does not belong in this module
-
 mass :: Particle -> Scalar
 mass (Particle (Mass x) _ _) = x
 

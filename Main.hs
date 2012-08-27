@@ -2,6 +2,8 @@ import Graphics.Rendering.OpenGL
 import Graphics.UI.GLUT
 import Data.IORef
 
+import Display
+import Update
 import Particles
 import Rendering
 
@@ -10,24 +12,9 @@ main = do
     (progName, _) <- getArgsAndInitialize
     initialDisplayMode $= [WithDepthBuffer,DoubleBuffered]
     createWindow "n-body gravity simulator"
+    windowSize $= Size 500 500
     depthFunc $= Just Lequal -- specifies comparison function for DepthBuffer
-    ps <- newIORef particles
-    idleCallback $= Just (idle ps)
-    displayCallback $= (display ps)
+    particlesRef <- newIORef particles
+    idleCallback $= Just (idle particlesRef)
+    displayCallback $= (display particlesRef)
     mainLoop
-
-display particles = do
-    clear [ColorBuffer, DepthBuffer]
-    loadIdentity
-    points <- get particles
-    renderPrimitive Points $ mapM_ (\(x,y,z) -> vertex $ Vertex3 x y z) $ getPositions points
-    swapBuffers
-
-idle particles = do
-    ps <- get particles
-    particles $= (update ps)
-    postRedisplay Nothing
-
-update particles = particles
--- update is the function that takes the current particles and applies gravity
--- between them all.
