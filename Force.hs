@@ -1,8 +1,5 @@
 module Force
 ( applyForces
-, calculateForces
-, distanceBetween
-, particles
 ) where
 
 import Particles
