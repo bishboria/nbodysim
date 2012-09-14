@@ -18,7 +18,8 @@ Changing the algorithm used as the program is running would be nice too.
 
 ## Current status
 
-Right now I'm rendering two static particles as a POC; not very interesting yet.
+5 particles interacting with each other. Eventually they all move off the
+screen. At that point kill the program.
 
 ## Running the code
 
