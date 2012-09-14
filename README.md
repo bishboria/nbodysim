@@ -1,5 +1,7 @@
 # N-body simulator in Haskell using openGL
 
+![](https://github.com/bishboria/nbodysim/blob/master/n-body-sim-screen-grab.png)
+
 The real aim of this project is to gradually increase the sofistication of the
 gravity algorithm.
 
