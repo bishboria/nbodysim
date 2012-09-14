@@ -1,8 +1,10 @@
 module Particles
 ( Position
+, Scalar
 , Velocity
 , Mass
 , Particle
+, mass
 , posX
 , posY
 , posZ
@@ -58,7 +60,7 @@ velocities =
     ]
 
 masses :: [Mass]
-masses = [ Mass 1
+masses = [ Mass 100
          , Mass 1
          ]
 
@@ -67,15 +69,3 @@ particles =
                <$> ZipList masses
                <*> ZipList positions
                <*> ZipList velocities
-
-distanceBetween :: Particle -> Particle -> Scalar
-distanceBetween i j = sqrt $ (x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2
-    where x2 = posX j
-          y2 = posY j
-          z2 = posZ j
-          x1 = posX i
-          y1 = posY i
-          z1 = posZ i
-
-{-force i j = (-g) * mass i * mass j / dr^2 -- missing r^ unit vector-}
-    {-where dr = distanceBetween i j-}

@@ -12,7 +12,7 @@ main = do
     (progName, _) <- getArgsAndInitialize
     initialDisplayMode $= [WithDepthBuffer,DoubleBuffered]
     createWindow "n-body gravity simulator"
-    windowSize $= Size 500 500
+    fullScreen
     depthFunc $= Just Lequal -- specifies comparison function for DepthBuffer
     particlesRef <- newIORef particles
     idleCallback $= Just (idle particlesRef)
