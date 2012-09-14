@@ -20,9 +20,9 @@ applyForce t (fx,fy,fz) (Particle m (Position px py pz) (Velocity vx vy vz)) =
             vx_new = vx + fx * t
             vy_new = vy + fy * t
             vz_new = vz + fz * t
-            px_new = px + vx_new
-            py_new = py + vy_new
-            pz_new = pz + vz_new
+            px_new = px + vx_new * t
+            py_new = py + vy_new * t
+            pz_new = pz + vz_new * t
 
 calculateForces ps = calculateForcesRecursive (length ps) ps
 

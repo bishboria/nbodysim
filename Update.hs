@@ -14,5 +14,5 @@ idle particlesRef = do
     postRedisplay Nothing
 
 -- time = 16ms was too much for window size
--- try time = 1ms
-update particles = applyForces 0.00000001 particles
+-- try time = 0.1ms
+update particles = applyForces 0.0001 particles
