@@ -2,17 +2,30 @@ module Force
 ( applyForces
 , calculateForces
 , distanceBetween
+, particles
 ) where
 
 import Particles
 
-applyForces ps = applyForcesInternal (calculateForces ps) ps
+applyForces :: Scalar -> [Particle] -> [Particle]
+applyForces t ps = applyForcesInternal t (calculateForces ps) ps
 
-applyForcesInternal _ [] = []
-applyForcesInternal (f:fs) (p:ps) =
-    applyForce f p : applyForcesInternal fs ps
+applyForcesInternal _ _      []     = []
+applyForcesInternal t (f:fs) (p:ps) =
+    applyForce t f p : applyForcesInternal t fs ps
 
-applyForce _ p = p
+applyForce t (fx,fy,fz) (Particle m (Position px py pz) (Velocity vx vy vz)) =
+    (Particle
+        m
+        (Position px_new py_new pz_new)
+        (Velocity vx_new vy_new vz_new))
+        where
+            vx_new = vx + fx * t
+            vy_new = vy + fy * t
+            vz_new = vz + fz * t
+            px_new = px + vx_new
+            py_new = py + vy_new
+            pz_new = pz + vz_new
 
 calculateForces ps = calculateForcesRecursive (length ps) ps
 

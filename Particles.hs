@@ -1,9 +1,9 @@
 module Particles
-( Position
-, Scalar
-, Velocity
-, Mass
-, Particle
+( Position(..)
+, Scalar(..)
+, Velocity(..)
+, Mass(..)
+, Particle(..)
 , mass
 , posX
 , posY
@@ -49,18 +49,21 @@ velZ particle = vz $ v particle
 
 positions :: [Position]
 positions =
-    [ Position 0   0 0
-    , Position 0.5 0 0
+    [ Position   0      0    0
+    , Position   0.9    0.9  0
+    , Position (-0.9) (-0.9) 0
     ]
 
 velocities :: [Velocity]
 velocities =
-    [ Velocity 0 0 0 
-    , Velocity 0 0 0
+    [ Velocity 0 0 0
+    , Velocity (-0.0001) 0 0
+    , Velocity 0.0001 0 0
     ]
 
 masses :: [Mass]
-masses = [ Mass 100
+masses = [ Mass 1
+         , Mass 1
          , Mass 1
          ]
 
