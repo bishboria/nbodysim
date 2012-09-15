@@ -9,7 +9,6 @@ import Particles
 
 idle particlesRef = do
     particles <- get particlesRef
-    putStrLn $ show particles
     particlesRef $= (update particles)
     postRedisplay Nothing
 

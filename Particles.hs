@@ -1,76 +1,82 @@
 module Particles
-( Position(..)
-, Scalar(..)
-, Velocity(..)
-, Mass(..)
-, Particle(..)
-, mass
-, posX
-, posY
-, posZ
-, particles
-) where
+(
+ Scalar
+,Mass
+,Particle
+,mkPosition
+,mkVelocity
+,mkParticle
+,x
+,y
+,z
+,mass
+,pos
+,vel
+,particles
+)
+where
 
 import Control.Applicative
+import qualified Data.Vector.Unboxed as V
 
 type Scalar   = Float
 
-data Mass     = Mass Scalar deriving (Show, Eq)
+type Mass     = Scalar
+type Vec3     = V.Vector Scalar
+type Position = Vec3
+type Velocity = Vec3
+data Particle = Particle Mass Position Velocity
 
-data Position = Position { px :: Scalar, py :: Scalar, pz :: Scalar }
-    deriving (Show, Eq)
+mkPosition :: Scalar -> Scalar -> Scalar -> Position
+mkPosition x y z = V.fromList [x,y,z]
 
-data Velocity = Velocity { vx :: Scalar, vy :: Scalar, vz :: Scalar }
-    deriving (Show, Eq)
+mkVelocity :: Scalar -> Scalar -> Scalar -> Velocity
+mkVelocity x y z = mkPosition x y z
 
-data Particle = Particle { m :: Mass, p :: Position, v :: Velocity }
-    deriving (Show, Eq)
+mkParticle m p z = Particle m p z
+
+x :: Vec3 -> Scalar
+x v = v V.! 0
+
+y :: Vec3 -> Scalar
+y v = v V.! 1
+
+z :: Vec3 -> Scalar
+z v = v V.! 2
 
 mass :: Particle -> Scalar
-mass (Particle (Mass x) _ _) = x
+mass (Particle x _ _) = x
 
-posX :: Particle -> Scalar
-posX particle = px $ p particle
+pos :: Particle -> Position
+pos (Particle _ p _) = p
 
-posY :: Particle -> Scalar
-posY particle = py $ p particle
-
-posZ :: Particle -> Scalar
-posZ particle = pz $ p particle
-
-velX :: Particle -> Scalar
-velX particle = vx $ v particle
-
-velY :: Particle -> Scalar
-velY particle = vy $ v particle
-
-velZ :: Particle -> Scalar
-velZ particle = vz $ v particle
+vel :: Particle -> Velocity
+vel (Particle _ _ v) = v
 
 positions :: [Position]
 positions =
-    [ Position   0      0    0
-    , Position   0.9    0.9  0
-    , Position (-0.9) (-0.9) 0
-    , Position   0.9    0    0
-    , Position (-0.9)   0.9  0
+    [ mkPosition   0      0    0
+    , mkPosition   0.9    0.9  0
+    , mkPosition (-0.9) (-0.9) 0
+    , mkPosition   0.9    0    0
+    , mkPosition (-0.9)   0.9  0
     ]
 
 velocities :: [Velocity]
 velocities =
-    [ Velocity 0 0 0
-    , Velocity (-0.0001) 0 0
-    , Velocity 0.0001 0 0
-    , Velocity 0 0.0001 0
-    , Velocity 0 (-0.0001) 0
+    [ mkVelocity 0 0 0
+    , mkVelocity (-0.0001) 0 0
+    , mkVelocity 0.0001 0 0
+    , mkVelocity 0 0.0001 0
+    , mkVelocity 0 (-0.0001) 0
     ]
 
 masses :: [Mass]
-masses = [ Mass 1
-         , Mass 1
-         , Mass 1
-         , Mass 1
-         , Mass 1
+masses = [ 1
+         , 1
+         , 1
+         , 1
+         , 1
          ]
 
 particles =

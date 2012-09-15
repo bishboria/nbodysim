@@ -3,6 +3,7 @@ module Force
 ) where
 
 import Particles
+import qualified Data.Vector.Unboxed as V
 
 applyForces :: Scalar -> [Particle] -> [Particle]
 applyForces t ps = applyForcesInternal t (calculateForces ps) ps
@@ -11,18 +12,20 @@ applyForcesInternal _ _      []     = []
 applyForcesInternal t (f:fs) (p:ps) =
     applyForce t f p : applyForcesInternal t fs ps
 
-applyForce t (fx,fy,fz) (Particle m (Position px py pz) (Velocity vx vy vz)) =
-    (Particle
-        m
-        (Position px_new py_new pz_new)
-        (Velocity vx_new vy_new vz_new))
+applyForce t (fx,fy,fz) particle =
+    mkParticle m
+               (mkPosition px_new py_new pz_new)
+               (mkVelocity vx_new vy_new vz_new)
         where
-            vx_new = vx + fx * t
-            vy_new = vy + fy * t
-            vz_new = vz + fz * t
-            px_new = px + vx_new * t
-            py_new = py + vy_new * t
-            pz_new = pz + vz_new * t
+            v = vel particle
+            p = pos particle
+            m = mass particle
+            vx_new = x v + fx * t
+            vy_new = y v + fy * t
+            vz_new = z v + fz * t
+            px_new = x p + vx_new * t
+            py_new = y p + vy_new * t
+            pz_new = z p + vz_new * t
 
 calculateForces ps = calculateForcesRecursive (length ps) ps
 
@@ -32,18 +35,20 @@ calculateForcesRecursive n (p:ps) =
 
 force :: Particle -> [Particle] -> (Scalar,Scalar,Scalar)
 force p ps =
-    (-g * sum [mass q * (posX p - posX q) / (distanceBetween p q ^ 3)| q <- ps]
-    ,-g * sum [mass q * (posY p - posY q) / (distanceBetween p q ^ 3)| q <- ps]
-    ,-g * sum [mass q * (posZ p - posZ q) / (distanceBetween p q ^ 3)| q <- ps]
+    (-g * sum [mass q * ((x $ pos p) - (x $ pos q)) / (distanceBetween p q ^ 3)| q <- ps]
+    ,-g * sum [mass q * ((y $ pos p) - (y $ pos q)) / (distanceBetween p q ^ 3)| q <- ps]
+    ,-g * sum [mass q * ((z $ pos p) - (z $ pos q)) / (distanceBetween p q ^ 3)| q <- ps]
     )
+
+{-f p q =-}
+    {-let dr = distanceBetween p q-}
+        {-mgdr = -g * mass q / dr^3-}
+    {-in  ((posX p - posX q) * mgdr-}
+        {-,(posY p - posY q) * mgdr-}
+        {-,(posZ p - posZ q) * mgdr-}
+        {-)-}
 
 g = 1.0 -- Scale gravity to 1...
 
 distanceBetween :: Particle -> Particle -> Scalar
-distanceBetween i j = sqrt $ (x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2
-    where x2 = posX j
-          y2 = posY j
-          z2 = posZ j
-          x1 = posX i
-          y1 = posY i
-          z1 = posZ i
+distanceBetween i j = (sqrt . V.sum . V.map (^2)) $ V.zipWith (-) (pos j) (pos i)
