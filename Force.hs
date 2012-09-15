@@ -12,20 +12,16 @@ applyForcesInternal _ _      []     = []
 applyForcesInternal t (f:fs) (p:ps) =
     applyForce t f p : applyForcesInternal t fs ps
 
-applyForce t (fx,fy,fz) particle =
-    mkParticle m
-               (mkPosition px_new py_new pz_new)
-               (mkVelocity vx_new vy_new vz_new)
+applyForce t f particle =
+    mkParticle (mass particle)
+               p_new
+               v_new
         where
-            m = mass particle
+            acc x y = V.zipWith (+) x $ V.map (*t) y
             v = vel particle
-            vx_new = x v + fx * t
-            vy_new = y v + fy * t
-            vz_new = z v + fz * t
             p = pos particle
-            px_new = x p + vx_new * t
-            py_new = y p + vy_new * t
-            pz_new = z p + vz_new * t
+            v_new = acc v f
+            p_new = acc p v_new
 
 calculateForces ps = calculateForcesRecursive (length ps) ps
 
@@ -33,12 +29,9 @@ calculateForcesRecursive 0 _      = []
 calculateForcesRecursive n (p:ps) =
     force p ps : calculateForcesRecursive (n-1) (ps ++ [p])
 
-force :: Particle -> [Particle] -> (Scalar,Scalar,Scalar)
-force p ps =
-    (-g * sum [mass q * ((x $ pos p) - (x $ pos q)) / (distanceBetween p q ^ 3)| q <- ps]
-    ,-g * sum [mass q * ((y $ pos p) - (y $ pos q)) / (distanceBetween p q ^ 3)| q <- ps]
-    ,-g * sum [mass q * ((z $ pos p) - (z $ pos q)) / (distanceBetween p q ^ 3)| q <- ps]
-    )
+force :: Particle -> [Particle] -> V.Vector Scalar
+force _ [] = V.fromList [0,0,0]
+force p (q:ps) = V.zipWith (+) (f p q) $ force p ps
 
 f p q =
     let dr = distanceBetween p q
