@@ -17,12 +17,12 @@ applyForce t (fx,fy,fz) particle =
                (mkPosition px_new py_new pz_new)
                (mkVelocity vx_new vy_new vz_new)
         where
-            v = vel particle
-            p = pos particle
             m = mass particle
+            v = vel particle
             vx_new = x v + fx * t
             vy_new = y v + fy * t
             vz_new = z v + fz * t
+            p = pos particle
             px_new = x p + vx_new * t
             py_new = y p + vy_new * t
             pz_new = z p + vz_new * t
@@ -40,13 +40,10 @@ force p ps =
     ,-g * sum [mass q * ((z $ pos p) - (z $ pos q)) / (distanceBetween p q ^ 3)| q <- ps]
     )
 
-{-f p q =-}
-    {-let dr = distanceBetween p q-}
-        {-mgdr = -g * mass q / dr^3-}
-    {-in  ((posX p - posX q) * mgdr-}
-        {-,(posY p - posY q) * mgdr-}
-        {-,(posZ p - posZ q) * mgdr-}
-        {-)-}
+f p q =
+    let dr = distanceBetween p q
+        mgdr = -g * mass q / dr^3
+    in  V.map (*mgdr) $ V.zipWith (-) (pos p) (pos q)
 
 g = 1.0 -- Scale gravity to 1...
 
