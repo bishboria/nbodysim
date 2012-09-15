@@ -3,6 +3,7 @@ module Particles
  Scalar
 ,Mass
 ,Particle
+,Vec3
 ,mkPosition
 ,mkVelocity
 ,mkParticle

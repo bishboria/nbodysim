@@ -5,6 +5,8 @@ module Force
 import Particles
 import qualified Data.Vector.Unboxed as V
 
+type Force = Vec3
+
 applyForces :: Scalar -> [Particle] -> [Particle]
 applyForces t ps = applyForcesInternal t (calculateForces ps) ps
 
@@ -29,16 +31,14 @@ calculateForcesRecursive 0 _      = []
 calculateForcesRecursive n (p:ps) =
     force p ps : calculateForcesRecursive (n-1) (ps ++ [p])
 
-force :: Particle -> [Particle] -> V.Vector Scalar
+force :: Particle -> [Particle] -> Force
 force _ [] = V.fromList [0,0,0]
 force p (q:ps) = V.zipWith (+) (f p q) $ force p ps
 
 f p q =
-    let dr = distanceBetween p q
+    let relative = V.zipWith (-) (pos p) (pos q)
+        dr = (sqrt . V.sum . V.map (^2)) relative
         mgdr = -g * mass q / dr^3
-    in  V.map (*mgdr) $ V.zipWith (-) (pos p) (pos q)
+    in  V.map (*mgdr) relative
 
 g = 1.0 -- Scale gravity to 1...
-
-distanceBetween :: Particle -> Particle -> Scalar
-distanceBetween i j = (sqrt . V.sum . V.map (^2)) $ V.zipWith (-) (pos j) (pos i)
