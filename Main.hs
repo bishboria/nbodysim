@@ -4,8 +4,8 @@ import Data.IORef
 
 import Display
 import Update
-import Particles
 import Rendering
+import InitialConfiguration
 
 main :: IO ()
 main = do

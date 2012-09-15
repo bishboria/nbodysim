@@ -19,7 +19,7 @@ applyForce t f particle =
                p_new
                v_new
         where
-            acc x y = V.zipWith (+) x $ V.map (*t) y
+            acc a b = V.zipWith (+) a $ V.map (*t) b
             v = vel particle
             p = pos particle
             v_new = acc v f
