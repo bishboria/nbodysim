@@ -14,8 +14,7 @@ module Particles
 , mass
 , pos
 , vel
-)
-where
+) where
 
 import qualified Data.Vector.Unboxed as V
 

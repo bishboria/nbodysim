@@ -4,7 +4,6 @@ import Data.IORef
 
 import Display
 import Update
-import Rendering
 import InitialConfiguration
 
 main :: IO ()

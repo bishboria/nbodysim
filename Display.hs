@@ -4,7 +4,6 @@ module Display
 
 import Graphics.UI.GLUT
 import Rendering
-import Particles
 
 display particlesRef = do
     clear [ColorBuffer, DepthBuffer]

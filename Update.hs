@@ -5,7 +5,6 @@ module Update
 import Data.IORef
 import Graphics.UI.GLUT
 import Force
-import Particles
 
 idle particlesRef = do
     particles <- get particlesRef
