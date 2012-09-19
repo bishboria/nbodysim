@@ -1,47 +1,31 @@
 module Particles
-( Scalar
-, Mass
+( Mass
 , Position
 , Velocity
 , Particle(..)
-, Vec3
 , mkPosition
 , mkVelocity
 , mkParticle
-, x
-, y
-, z
 , mass
 , pos
 , vel
 ) where
 
-import qualified Data.Vector.Unboxed as V
-
-type Scalar   = Float
+import BaseTypes
 
 type Mass     = Scalar
-type Vec3     = V.Vector Scalar
 type Position = Vec3
 type Velocity = Vec3
 data Particle = Particle Mass Position Velocity
 
 mkPosition :: Scalar -> Scalar -> Scalar -> Position
-mkPosition x y z = V.fromList [x,y,z]
+mkPosition = mkVec3
 
 mkVelocity :: Scalar -> Scalar -> Scalar -> Velocity
-mkVelocity x y z = mkPosition x y z
+mkVelocity = mkPosition
 
-mkParticle m p z = Particle m p z
-
-x :: Vec3 -> Scalar
-x v = v V.! 0
-
-y :: Vec3 -> Scalar
-y v = v V.! 1
-
-z :: Vec3 -> Scalar
-z v = v V.! 2
+mkParticle :: Mass -> Position -> Velocity -> Particle
+mkParticle m p v = Particle m p v
 
 mass :: Particle -> Scalar
 mass (Particle x _ _) = x

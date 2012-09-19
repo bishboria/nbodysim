@@ -3,11 +3,11 @@ module Force
 ) where
 
 import Particles
-import qualified Data.Vector.Unboxed as V
+import qualified BaseTypes as B
 
-type Force = Vec3
+type Force = B.Vec3
 
-applyForces :: Scalar -> [Particle] -> [Particle]
+applyForces :: B.Scalar -> [Particle] -> [Particle]
 applyForces t ps = applyForcesInternal t (calculateForces ps) ps
 
 applyForcesInternal _ _      []     = []
@@ -19,7 +19,7 @@ applyForce t f particle =
                p_new
                v_new
         where
-            acc a b = V.zipWith (+) a $ V.map (*t) b
+            acc a b = B.vzipWith (+) a $ B.vmap (*t) b
             v       = vel particle
             p       = pos particle
             v_new   = acc v f
@@ -32,13 +32,13 @@ calculateForcesRecursive n (p:ps) =
     force p ps : calculateForcesRecursive (n-1) (ps ++ [p])
 
 force :: Particle -> [Particle] -> Force
-force _ []     = V.fromList [0,0,0]
-force p (q:ps) = V.zipWith (+) (f p q) $ force p ps
+force _ []     = B.vzero
+force p (q:ps) = B.vzipWith (+) (f p q) $ force p ps
 
 f p q =
-    let relative = V.zipWith (-) (pos p) (pos q)
-        dr       = (sqrt . V.sum . V.map (^2)) relative
+    let relative = B.vzipWith (-) (pos p) (pos q)
+        dr       = (sqrt . B.vsum . B.vmap (^2)) relative
         mgdr     = -g * mass q / dr^3
-    in  V.map (*mgdr) relative
+    in  B.vmap (*mgdr) relative
 
 g = 1.0 -- Scale gravity to 1...

@@ -3,6 +3,7 @@ module Rendering
 ) where
 
 import Particles
+import BaseTypes
 import Graphics.Rendering.OpenGL
 
 getPositions :: [Particle] -> [(GLfloat, GLfloat, GLfloat)]
