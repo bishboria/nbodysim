@@ -20,10 +20,10 @@ applyForce t f particle =
                v_new
         where
             acc a b = V.zipWith (+) a $ V.map (*t) b
-            v = vel particle
-            p = pos particle
-            v_new = acc v f
-            p_new = acc p v_new
+            v       = vel particle
+            p       = pos particle
+            v_new   = acc v f
+            p_new   = acc p v_new
 
 calculateForces ps = calculateForcesRecursive (length ps) ps
 
@@ -32,13 +32,13 @@ calculateForcesRecursive n (p:ps) =
     force p ps : calculateForcesRecursive (n-1) (ps ++ [p])
 
 force :: Particle -> [Particle] -> Force
-force _ [] = V.fromList [0,0,0]
+force _ []     = V.fromList [0,0,0]
 force p (q:ps) = V.zipWith (+) (f p q) $ force p ps
 
 f p q =
     let relative = V.zipWith (-) (pos p) (pos q)
-        dr = (sqrt . V.sum . V.map (^2)) relative
-        mgdr = -g * mass q / dr^3
+        dr       = (sqrt . V.sum . V.map (^2)) relative
+        mgdr     = -g * mass q / dr^3
     in  V.map (*mgdr) relative
 
 g = 1.0 -- Scale gravity to 1...
