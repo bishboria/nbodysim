@@ -13,4 +13,4 @@ idle particlesRef = do
 
 -- time = 16ms was too much for window size
 -- try time = 0.1ms
-update particles = applyForces 0.0001 particles
+update particles = applyForces 0.000001 particles
