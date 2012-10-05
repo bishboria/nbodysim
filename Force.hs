@@ -29,8 +29,7 @@ calculateForcesRecursive n (p:ps) =
     force p ps : calculateForcesRecursive (n-1) (ps ++ [p])
 
 force :: Particle -> [Particle] -> Force
-force _ []     = B.vzero
-force p (q:ps) = B.vzipWith (+) (f p q) $ force p ps
+force p ps = foldr (\q -> B.vzipWith (+) (f p q)) B.vzero ps
   where
     f p q = B.vmap (*mgdr) relative
       where
