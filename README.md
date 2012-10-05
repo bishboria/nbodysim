@@ -18,8 +18,8 @@ Changing the algorithm used as the program is running would be nice too.
 
 ## Current status
 
-5 particles interacting with each other. Eventually they all move off the
-screen. At that point kill the program.
+2 particles in, what seems to be, a stable orbit around a much heavier
+particle. The mass ratios are roughly that of the Sun and Earth.
 
 ## Running the code
 
