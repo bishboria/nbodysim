@@ -2,13 +2,14 @@ module Particles
 ( Mass
 , Position
 , Velocity
-, Particle(..)
-, mkPosition
-, mkVelocity
-, mkParticle
+, Particle
 , mass
 , pos
 , vel
+, mkPosition
+, mkVelocity
+, mkParticle
+, getPositions
 ) where
 
 import BaseTypes
@@ -16,7 +17,11 @@ import BaseTypes
 type Mass     = Scalar
 type Position = Vec3
 type Velocity = Vec3
-data Particle = Particle Mass Position Velocity
+data Particle = Particle
+    { mass :: Mass
+    , pos  :: Position
+    , vel  :: Velocity
+    }
 
 mkPosition :: Scalar -> Scalar -> Scalar -> Position
 mkPosition = mkVec3
@@ -27,11 +32,10 @@ mkVelocity = mkPosition
 mkParticle :: Mass -> Position -> Velocity -> Particle
 mkParticle m p v = Particle m p v
 
-mass :: Particle -> Scalar
-mass (Particle x _ _) = x
+getPositions :: [Particle] -> [(Scalar, Scalar, Scalar)]
+getPositions = map getPosition
 
-pos :: Particle -> Position
-pos (Particle _ p _) = p
-
-vel :: Particle -> Velocity
-vel (Particle _ _ v) = v
+getPosition particle =
+    (x p, y p, z p)
+  where
+    p = pos particle

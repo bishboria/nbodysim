@@ -32,7 +32,7 @@ masses = [ 1
          ]
 
 particles =
-    getZipList $ (\x y z -> Particle x y z)
+    getZipList $ (\x y z -> mkParticle x y z)
                <$> ZipList masses
                <*> ZipList positions
                <*> ZipList velocities
