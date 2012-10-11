@@ -17,11 +17,17 @@ import BaseTypes
 type Mass     = Scalar
 type Position = Vec3
 type Velocity = Vec3
-data Particle = Particle
-    { mass :: Mass
-    , pos  :: Position
-    , vel  :: Velocity
-    }
+data Particle = Particle {-# UNPACK #-}
+                         !Mass !Position !Velocity
+
+mass :: Particle -> Mass
+mass (Particle m _ _) = m
+
+pos  :: Particle -> Position
+pos  (Particle _ p _) = p
+
+vel  :: Particle -> Velocity
+vel  (Particle _ _ v) = v
 
 mkPosition :: Scalar -> Scalar -> Scalar -> Position
 mkPosition = mkVec3

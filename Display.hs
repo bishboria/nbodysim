@@ -3,7 +3,7 @@ module Display
 ) where
 
 import Graphics.UI.GLUT
-import Particles
+import Particles(getPositions)
 
 display particlesRef = do
     clear [ColorBuffer, DepthBuffer]

@@ -8,25 +8,19 @@ import qualified BaseTypes as B
 type Force = B.Vec3
 
 applyForces :: B.Scalar -> [Particle] -> [Particle]
-applyForces t ps = applyForcesInternal t (calculateForces ps) ps
+applyForces t ps = applyForcesInternal t force ps (length ps)
 
-applyForcesInternal _ _  [] = []
-applyForcesInternal t fs ps = zipWith (applyForce t) fs ps
+applyForcesInternal _ _ _      0 = []
+applyForcesInternal t f (p:ps) n =
+    applyForce t f p ps : applyForcesInternal t f (ps++[p]) (n-1)
 
-applyForce t f particle =
-    mkParticle (mass particle) p_new v_new
+applyForce t f p ps =
+    mkParticle (mass p) p_new v_new
   where
-    acc a b = B.vzipWith (+) a $ B.vmap (*t) b
-    v       = vel particle
-    p       = pos particle
-    v_new   = acc v f
-    p_new   = acc p v_new
-
-calculateForces ps = calculateForcesRecursive (length ps) ps
-
-calculateForcesRecursive 0 _      = []
-calculateForcesRecursive n (p:ps) =
-    force p ps : calculateForcesRecursive (n-1) (ps ++ [p])
+    integrate a b = B.vzipWith (+) a $ B.vmap (*t) b
+    force         = f p ps
+    v_new         = integrate (vel p) force
+    p_new         = integrate (pos p) v_new
 
 force :: Particle -> [Particle] -> Force
 force p ps = foldr (\q -> B.vzipWith (+) (f p q)) B.vzero ps
