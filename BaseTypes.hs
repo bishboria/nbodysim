@@ -12,8 +12,9 @@ module BaseTypes
 ) where
 
 type Scalar = Float
-data Vec3   = V3 {-# UNPACK #-}
-                 !Scalar !Scalar !Scalar
+data Vec3   = V3 {-# UNPACK #-} !Scalar
+                 {-# UNPACK #-} !Scalar
+                 {-# UNPACK #-} !Scalar
 
 mkVec3 :: Scalar -> Scalar -> Scalar -> Vec3
 mkVec3 x y z = V3 x y z

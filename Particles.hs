@@ -17,8 +17,9 @@ import BaseTypes
 type Mass     = Scalar
 type Position = Vec3
 type Velocity = Vec3
-data Particle = Particle {-# UNPACK #-}
-                         !Mass !Position !Velocity
+data Particle = Particle {-# UNPACK #-} !Mass
+                         {-# UNPACK #-} !Position
+                         {-# UNPACK #-} !Velocity
 
 mass :: Particle -> Mass
 mass (Particle m _ _) = m
