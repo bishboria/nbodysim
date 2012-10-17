@@ -17,4 +17,5 @@ main = do
     particlesRef <- newIORef particles
     idleCallback $= Just (idle particlesRef)
     displayCallback $= (display particlesRef)
+    keyboardMouseCallback $= Just (keyboardMouse)
     mainLoop
