@@ -23,7 +23,7 @@ applyForce t f p ps =
     p_new         = integrate (pos p) v_new
 
 force :: Particle -> [Particle] -> Force
-force p ps = foldr (\q -> B.vzipWith (+) (f p q)) B.vzero ps
+force p = foldr (B.vzipWith (+) . f p) B.vzero
   where
     f p q = B.vmap (*mgdr) relative
       where

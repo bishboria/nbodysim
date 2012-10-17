@@ -37,7 +37,7 @@ mkVelocity :: Scalar -> Scalar -> Scalar -> Velocity
 mkVelocity = mkPosition
 
 mkParticle :: Mass -> Position -> Velocity -> Particle
-mkParticle m p v = Particle m p v
+mkParticle = Particle
 
 getPositions :: [Particle] -> [(Scalar, Scalar, Scalar)]
 getPositions = map getPosition

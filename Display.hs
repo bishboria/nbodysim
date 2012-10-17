@@ -14,4 +14,4 @@ display particlesRef = do
     swapBuffers
 
 toGL :: (Real a) => a -> GLfloat
-toGL x = realToFrac x
+toGL = realToFrac

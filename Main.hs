@@ -16,6 +16,6 @@ main = do
     depthFunc $= Just Lequal -- specifies comparison function for DepthBuffer
     particlesRef <- newIORef particles
     idleCallback $= Just (idle particlesRef)
-    displayCallback $= (display particlesRef)
-    keyboardMouseCallback $= Just (keyboardMouse)
+    displayCallback $= display particlesRef
+    keyboardMouseCallback $= Just keyboardMouse
     mainLoop

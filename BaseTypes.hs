@@ -17,7 +17,7 @@ data Vec3   = V3 {-# UNPACK #-} !Scalar
                  {-# UNPACK #-} !Scalar
 
 mkVec3 :: Scalar -> Scalar -> Scalar -> Vec3
-mkVec3 x y z = V3 x y z
+mkVec3 = V3
 
 vzero :: Vec3
 vzero = mkVec3 0 0 0
